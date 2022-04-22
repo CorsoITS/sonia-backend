@@ -12,6 +12,17 @@ class PersonaController {
         let result = await Persona.lista();
         return res.json(result);
     }
+
+    static async insert (req, res) {
+        let np = new Persona();
+        if (req.body.nome) np.setNome(req.body.nome);
+        if (req.body.cognome) np.setCognome(req.body.cognome);
+        if (req.body.codice_fiscale) np.setCodFis(req.body.codice_fiscale);
+        await np.save();
+        return res.json({
+            message: 'done'
+        }); 
+    }
 }
 
 module.exports = {

@@ -1,4 +1,4 @@
-const { listPersona } = require("../dao/persona.dao");
+const { listPersona, insertPersona } = require("../dao/persona.dao");
 
 class Persona {
     constructor(p) {
@@ -17,6 +17,44 @@ class Persona {
             res.push(new Persona(element));
         });
         return res;
+    }
+
+    setId(x) {
+    if (x == null || typeof(x) == 'undefined')  throw 'Nome cannot be null';
+    this.id = x;
+    }
+    getId() {
+        return this.id;
+    }
+
+    setNome(x) {
+        if (x == null || typeof(x) == 'undefined')  throw 'Nome cannot be null';
+        this.nome = x;
+    }
+    getNome() {
+        return this.nome;
+    }
+
+    setCognome(x) {
+        if (x == null || typeof(x) == 'undefined')  throw 'Cognome cannot be null';
+        this.cognome = x;
+    }
+    getCognome() {
+        return this.cognome;
+    }
+
+    setCodFis(x) {
+        this.codice_fiscale = x;
+
+    }
+    getCodFis() {
+        return this.codice_fiscale;
+    }
+
+    async save () {
+        let res = await insertPersona (this.nome, this.cognome, this.codice_fiscale);
+        this.setId(res);
+        if (! res) throw 'save Persona failed (insert case).'; 
     }
 }
 

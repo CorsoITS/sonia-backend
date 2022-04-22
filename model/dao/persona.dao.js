@@ -8,6 +8,14 @@ const listPersona = async () => {
     return rows;
 }
 
+const insertPersona = async (nome, cognome, codice_fiscale) => {
+    const conn = await getConnection();
+    const query = 'INSERT INTO persona (nome, cognome, codice_fiscale) VALUES (?, ?, ?)';
+    const [res] = await conn.query(query, [nome, cognome, codice_fiscale]);
+    return res.insertId;
+}
+
 module.exports = {
-    listPersona
+    listPersona,
+    insertPersona
 }
