@@ -15,7 +15,23 @@ const insertPersona = async (nome, cognome, codice_fiscale) => {
     return res.insertId;
 }
 
+const updatePersona = async (id, nome, cognome, codice_fiscale) => {
+    const conn = await getConnection();
+    const query = 'UPDATE persona SET nome = ?, cognome = ?, codice_fiscale = ? WHERE id = ?';
+    const [res] = await conn.query(query, [nome, cognome, codice_fiscale, id]);
+    return res.affectedRows === 1;
+}
+
+const getPersonaById = async (id) => {
+    const conn = await getConnection();
+    const query = 'SELECT * FROM persona WHERE id = ?';
+    const [rows] = await conn.query(query, [id]);
+    return rows[0];
+  }
+
 module.exports = {
     listPersona,
-    insertPersona
+    insertPersona,
+    getPersonaById,
+    updatePersona
 }
