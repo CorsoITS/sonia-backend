@@ -1,3 +1,5 @@
+const { Persona } = require("../model/models/Persona");
+
 const checkId = async (req,res,next) => {
     try {
         if (req.params.id) {
@@ -7,8 +9,8 @@ const checkId = async (req,res,next) => {
             }
             let p;
             p = await Persona.get(req.params.id);
-            if (p ) {
-                req.Persona  = p;
+            if (p) {
+                req.Persona = p;
                 next();
             }  else {
                 return res.status(404).send ("id not found");                    
@@ -16,7 +18,7 @@ const checkId = async (req,res,next) => {
         } else {
             return res.status(404).send("sometihng went wrong");
         }
-    } catch (err) {
+    } catch {
         return res.status(500).send ("Internal Server Error");
     }            
 }
