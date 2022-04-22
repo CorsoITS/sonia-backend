@@ -1,20 +1,23 @@
 require('dotenv').config();
 const express = require('express');
 const { json, urlencoded } = require('body-parser');
-const { routerPersona } = require('./routers/persona');
-const { routerPrenotazione } = require('./routers/prenotazione');
-const { routerPrenotazionePersona } = require('./routers/prenotazione-persona');
-const fileUpload = require('express-fileupload');
+const cors = require('cors');
+const { ConnectRouter } = require('./routes/main-router');
 const app = express();
 const port = 3000;
 
-app.use(express.static());
 app.use(json());
+app.use(cors());
+app.use(urlencoded({ extended: true }));
+
+app.options('*', cors());
 
 app.get('/test', (req, res) => {
     res.json ({
         messaggio: 'everything ok'
     }).send();
 });
+
+ConnectRouter(app);
 
 app.listen(port);
