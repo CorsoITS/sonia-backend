@@ -1,4 +1,4 @@
-const { listPersona, insertPersona, getPersonaById, updatePersona } = require("../dao/persona.dao");
+const { listPersona, insertPersona, getPersonaById, updatePersona, deletePersona } = require("../dao/persona.dao");
 
 class Persona {
     constructor(p) {
@@ -23,6 +23,10 @@ class Persona {
         let pf = await getPersonaById(id);
         if (pf) { return new Persona(pf);}
         return null;
+    }
+
+    static async delete(id) {
+        return await deletePersona(id);
     }
 
     setId(x) {
@@ -57,15 +61,15 @@ class Persona {
         return this.codice_fiscale;
     }
 
-    async insert () {
-        let res = await insertPersona (this.nome, this.cognome, this.codice_fiscale);
-        this.setId(res);
-        if (! res) throw 'save Persona failed (insert case).'; 
-    }
-
-    async update () {
-        let res = await updatePersona (this.id, this.nome, this.cognome, this.codice_fiscale);
-        if (! res) throw 'save Persona failed (insert case).'; 
+    async save () {
+            if (typeof (this.id) != 'undefined' && this.id != null ) {
+                let res = await updatePersona (this.id, this.nome, this.cognome, this.codice_fiscale);
+                if (! res) throw 'save Persona failed (insert case).'; 
+            } else {
+                let res = await insertPersona (this.nome, this.cognome, this.codice_fiscale);
+                this.setId(res);
+                if (! res) throw 'save Persona failed (insert case).'; 
+        }
     }
 }
 

@@ -14,30 +14,60 @@ class PersonaController {
     }
 
     static async get (req, res) {
-        let result = await Persona.get(req.params.id);
+        let result;
+        if (! req.Persona) {
+            result = await Persona.get(req.params.id);
+        } else {
+            result = req.Persona;
+        }
         return res.json(result);
     }
 
     static async insert (req, res) {
-        let np = new Persona();
-        if (req.body.nome) np.setNome(req.body.nome);
-        if (req.body.cognome) np.setCognome(req.body.cognome);
-        if (req.body.codice_fiscale) np.setCodFis(req.body.codice_fiscale);
-        await np.insert();
-        return res.json({
-            message: 'done'
-        }); 
+        try {
+            let np = new Persona();
+            if (req.body.nome) np.setNome(req.body.nome);
+            if (req.body.cognome) np.setCognome(req.body.cognome);
+            if (req.body.codice_fiscale) np.setCodFis(req.body.codice_fiscale);
+            await np.save();
+            // return res.json({
+            //     message: 'done'
+            // }); 
+            res.status(200).send("Ok");
+        } catch {
+            res.status(500).send ("Internal Server Error");
+        }
     }
 
     static async update (req, res) {
-        let np = await Persona.get(req.params.id);
-        if (req.body.nome) np.setNome(req.body.nome);
-        if (req.body.cognome) np.setCognome(req.body.cognome);
-        if (req.body.codice_fiscale) np.setCodFis(req.body.codice_fiscale);
-        await np.update();
-        return res.json({
-            message: 'done'
-        }); 
+        try {
+            let np = await Persona.get(req.params.id);
+            if (req.body.nome) np.setNome(req.body.nome);
+            if (req.body.cognome) np.setCognome(req.body.cognome);
+            if (req.body.codice_fiscale) np.setCodFis(req.body.codice_fiscale);
+            await np.save();
+            // return res.json({
+            //     message: 'done'
+            // }); 
+            res.status(200).send("Ok");
+        } catch {
+            res.status(500).send ("Internal Server Error");
+        }
+    }
+
+    static async delete (req, res) {
+        try {
+            if (await Persona.delete(req.params.id)) {
+                res.status(200).send('ok');
+            } else {
+                res.status(400).send ("something went wrong");
+            }
+        // return res.json({
+        //     message: 'successfully deleted'
+        // }); 
+        } catch {
+            res.status(500).send ("Internal Server Error");
+        }
     }
 }
 

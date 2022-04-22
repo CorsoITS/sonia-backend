@@ -29,9 +29,17 @@ const getPersonaById = async (id) => {
     return rows[0];
   }
 
+const deletePersona = async (id) => {
+    const conn = await getConnection();
+    const query = 'DELETE FROM persona WHERE id = ?';
+    const [res] = await conn.query(query, [id]);
+    return res.affectedRows === 1;
+  }
+
 module.exports = {
     listPersona,
     insertPersona,
     getPersonaById,
-    updatePersona
+    updatePersona,
+    deletePersona
 }
