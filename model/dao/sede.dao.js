@@ -1,9 +1,12 @@
 const { getConnection } = require("../../db/connection")
 
-const listSede = async () => {
+const listSede = async (prenotazioni) => {
     const conn = await getConnection();
     // console.log('trying operatore');
-    const query = 'SELECT * FROM sede';
+    let query = 'SELECT * FROM sede';
+    if (prenotazioni) {
+        query="SELECT sede.* , prenotazione.id as pren_id FROM sede left join prenotazione on sede.id = prenotazione.sede_id WHERE prenotazione.id IS NULL";
+    }
     const [rows] = await conn.query(query);
     return rows;
 }

@@ -5,8 +5,8 @@ const routerSede = Router();
 
 // console.log('trying operatore router...')
 routerSede.get('/', SedeController.lista);
-routerSede.get('/:id', SedeController.get);
-routerSede.post('/', checkIdSede, SedeController.insert);
+routerSede.get('/:id', checkIdSede, SedeController.get);
+routerSede.post('/', SedeController.insert);
 routerSede.put('/:id', checkIdSede, SedeController.update);
 routerSede.delete('/:id', checkIdSede, SedeController.delete);
 
