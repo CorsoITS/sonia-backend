@@ -16,6 +16,7 @@ class PrenotazioneController {
         try {
             let np = new Prenotazione();
             if (req.body.data) np.setData(req.body.data);
+            if (req.body.note) np.setNote(req.body.note);
             if (req.body.pers_id) np.setPersId(req.body.pers_id);
             if (req.body.sede_id) np.setSedeId(req.body.sede_id);
             await np.save();
@@ -25,7 +26,7 @@ class PrenotazioneController {
             res.status(200).send("Ok");
         } catch (e) {
             res.status(500).send ('Internal Server Error');
-            // console.log(e);
+            console.log(e);
         }
     }
 
@@ -33,6 +34,7 @@ class PrenotazioneController {
         try {
             let np = await Prenotazione.get(req.params.id);
             if (req.body.data) np.setData(req.body.data);
+            if (req.body.note) np.setNote(req.body.note);
             if (req.body.pers_id) np.setPersId(req.body.pers_id);
             if (req.body.sede_id) np.setSedeId(req.body.sede_id);
             await np.save();
@@ -42,7 +44,7 @@ class PrenotazioneController {
             res.status(200).send("Ok");
         } catch (e) {
             res.status(500).send ("Internal Server Error");
-            // console.log(e);
+            console.log(e);
         }
     }
 

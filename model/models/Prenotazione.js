@@ -5,6 +5,7 @@ class Prenotazione {
         if (p) {
             if (p.id) this.id = p.id;
             if (p.data) this.data = p.data;
+            if (p.note) this.note = p.note;
 
             if (p.pers_id)                this.pers_id  =p.pers_id;
             if (p.nome)                   this.nome  =p.nome;
@@ -51,6 +52,14 @@ class Prenotazione {
     }
     getData() {
         return this.data;
+    }
+
+    setNote(x) {
+    if (x == null || typeof(x) == 'undefined')  throw 'Nome cannot be null';
+    this.note = x;
+    }
+    getNote() {
+        return this.note;
     }
 
     setPersId(x) {
@@ -111,11 +120,11 @@ class Prenotazione {
 
     async save () {
             if (typeof (this.id) != 'undefined' && this.id != null ) {
-                let res = await updatePrenotazione (this.id, this.data, this.pers_id, this.sede_id);
+                let res = await updatePrenotazione (this.id, this.data, this.note, this.pers_id, this.sede_id);
                 // console.log(res);
                 if (! res) throw 'save Prenotazione failed (insert case).'; 
             } else {
-                let res = await insertPrenotazione (this.data, this.pers_id, this.sede_id);
+                let res = await insertPrenotazione (this.data, this.note, this.pers_id, this.sede_id);
                 this.setId(res);
                 if (! res) throw 'save Prenotazione failed (insert case).'; 
         }

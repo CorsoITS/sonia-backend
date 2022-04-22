@@ -14,17 +14,17 @@ const listPrenotazione = async () => {
     return rows;
 }
 
-const insertPrenotazione = async (data, persona_id, sede_id, somministrazione_id=null) => {
+const insertPrenotazione = async (data, note=null, persona_id, sede_id, somministrazione_id=null) => {
     const conn = await getConnection();
-    const query = 'INSERT INTO prenotazione (data, persona_id, sede_id, somministrazione_id) VALUES (?, ?, ?, ?)';
-    const [res] = await conn.query(query, [data, persona_id, sede_id, somministrazione_id]);
+    const query = 'INSERT INTO prenotazione (data, note, persona_id, sede_id, somministrazione_id) VALUES (?, ?, ?, ?, ?)';
+    const [res] = await conn.query(query, [data, note, persona_id, sede_id, somministrazione_id]);
     return res.insertId;
 }
 
-const updatePrenotazione = async (id, data, persona_id, sede_id, somministrazione_id=null) => {
+const updatePrenotazione = async (id, data, note=null, persona_id, sede_id, somministrazione_id=null) => {
     const conn = await getConnection();
-    const query = 'UPDATE prenotazione SET data = ?, persona_id = ?, sede_id = ?, somministrazione_id = ? WHERE id = ?';
-    const [res] = await conn.query(query, [data, persona_id, sede_id, somministrazione_id, id]);
+    const query = 'UPDATE prenotazione SET data = ?, note = ?, persona_id = ?, sede_id = ?, somministrazione_id = ? WHERE id = ?';
+    const [res] = await conn.query(query, [data, note, persona_id, sede_id, somministrazione_id, id]);
     // console.log(res);
     return res.affectedRows === 1;
 }
