@@ -1,72 +1,55 @@
 using Microsoft.AspNetCore.Mvc;
+using Esercizio.Services;
+using Esercizio.Models;
 
 namespace Esercizio.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class SedeController : ControllerBase
-{
-    private static Dictionary<int, Sede> dict = new Dictionary<int, Sede>();
+public class SedeController : ControllerBase{
+
+    private SedeService sedeService = new SedeService();
 
     [HttpGet]
-    public IEnumerable<Sede> GetSedi()
-    {
-        return dict.Values.ToArray();
+    public IEnumerable<Sede> GetSedi(){
+        return sedeService.GetSedi();
     }
 
-        [HttpGet("{id}")]
-    public ActionResult<Sede> GetSede(int id)
-    {
-        if (dict.ContainsKey(id))
-        {
-            return dict[id];
-        }
-        else
-        {
-            return NotFound();
-        }
+    [HttpGet("{id}")]
+    public Sede GetSede(int id){
+        return sedeService.GetSede(id);
     }
 
-        [HttpPost]
-    public IActionResult Create(Sede sede)
-    {
-        if (dict.ContainsKey(sede.Id))
-        {
-            return BadRequest();
-        }
-        else
-        {
-            dict.Add(sede.Id, sede);
+    [HttpPost]
+    public IActionResult Create(Sede sede){
+        var created = sedeService.Create(sede);
+        if (created){
             return Ok();
         }
-    }
-
-    [HttpPut("{id}")]
-    public IActionResult Update(int id, [FromBody] Sede sede)
-    {
-        if (!dict.ContainsKey(id))
-        {
+        else{
             return BadRequest();
         }
-        else
-        {
-            dict[id] = sede;
+    }
+
+    [HttpPut]
+    public IActionResult Update(Sede sede){
+        var updated = sedeService.Update(sede);
+        if (updated){
             return Ok();
+        }
+        else{
+            return BadRequest();
         }
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
-    {
-        if (!dict.ContainsKey(id))
-        {
-            return BadRequest();
-        }
-        else
-        {
-            dict.Remove(id);
+    public IActionResult Delete(int id){
+        var deleted = sedeService.Delete(id);
+        if (deleted){
             return Ok();
         }
+        else{
+            return BadRequest();
+        }
     }
-    
 }
