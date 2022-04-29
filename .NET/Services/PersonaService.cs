@@ -1,54 +1,39 @@
 using Esercizio.Repositories;
+using Esercizio.Models;
 
-namespace Esercizio.Service;
+namespace Esercizio.Services;
 
-public class PersonaService
-{
+public class PersonaService{
 
     private PersonaRepository personaRepository = new PersonaRepository();
 
-    public IEnumerable<Persona> GetPeople()
-    {
+    public IEnumerable<Persona> GetPeople(){
         return personaRepository.GetPeople();
     }
 
-    public Persona GetPerson(int id)
-    {
-        return personaRepository.GetPerson(id);
+    public Persona GetPersona(int id){
+        return personaRepository.GetPersona(id);
     }
 
-    public bool Create(Persona persona)
-    {
-        if (personaRepository.GetPerson(persona.Id) == null)
-        {
-            if (String.IsNullOrEmpty(persona.Nome))
-            {
-                return false;
-            } 
-            else if (persona.Nome.Length > 0) 
-            {
-                return false;
-            }
-            else
-            {
+    public bool Create(Persona persona){
+        if (personaRepository.GetPersona(persona.id) == null){
+            if (!String.IsNullOrEmpty(persona.nome) & persona.nome.Length > 0 & persona.cognome.Length > 0){
                 return personaRepository.Create(persona);
             }
-            }
-            else
-            {
+            else{
                 return false;
             }
-
+        }
+        else{
+            return false;
+        }
     }
 
-    public bool Update(Persona persona)
-    {
+    public bool Update(Persona persona){
         return personaRepository.Update(persona);
     }
 
-    public bool Delete(int id)
-    {
+    public bool Delete(int id){
         return personaRepository.Delete(id);
     }
-
 }
