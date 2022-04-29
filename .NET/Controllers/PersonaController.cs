@@ -1,72 +1,55 @@
 using Microsoft.AspNetCore.Mvc;
+using Esercizio.Services;
+using Esercizio.Models;
 
 namespace Esercizio.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class PersonaController : ControllerBase
-{
-    private static Dictionary<int, Persona> dict = new Dictionary<int, Persona>();
+public class PersonaController : ControllerBase{
+
+    private PersonaService personaService = new PersonaService();
 
     [HttpGet]
-    public IEnumerable<Persona> GetPeople()
-    {
-        return dict.Values.ToArray();
+    public IEnumerable<Persona> GetPeople(){
+        return personaService.GetPeople();
     }
 
-        [HttpGet("{id}")]
-    public ActionResult<Persona> GetPerson(int id)
-    {
-        if (dict.ContainsKey(id))
-        {
-            return dict[id];
-        }
-        else
-        {
-            return NotFound();
-        }
+    [HttpGet("{id}")]
+    public Persona GetPersona(int id){
+        return personaService.GetPersona(id);
     }
 
-        [HttpPost]
-    public IActionResult Create(Persona persona)
-    {
-        if (dict.ContainsKey(persona.Id))
-        {
-            return BadRequest();
-        }
-        else
-        {
-            dict.Add(persona.Id, persona);
+    [HttpPost]
+    public IActionResult Create(Persona persona){
+        var created = personaService.Create(persona);
+        if (created){
             return Ok();
         }
-    }
-
-    [HttpPut("{id}")]
-    public IActionResult Update(int id, [FromBody] Persona persona)
-    {
-        if (!dict.ContainsKey(id))
-        {
+        else{
             return BadRequest();
         }
-        else
-        {
-            dict[id] = persona;
+    }
+
+    [HttpPut]
+    public IActionResult Update(Persona persona){
+        var updated = personaService.Update(persona);
+        if (updated){
             return Ok();
+        }
+        else{
+            return BadRequest();
         }
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
-    {
-        if (!dict.ContainsKey(id))
-        {
-            return BadRequest();
-        }
-        else
-        {
-            dict.Remove(id);
+    public IActionResult Delete(int id){
+        var deleted = personaService.Delete(id);
+        if (deleted){
             return Ok();
         }
+        else{
+            return BadRequest();
+        }
     }
-    
 }

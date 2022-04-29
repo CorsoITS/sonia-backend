@@ -1,4 +1,5 @@
 using Esercizio.Context;
+using Esercizio.Models;
 using MySql.Data.MySqlClient;
 
 namespace Esercizio.Repositories;
@@ -6,14 +7,14 @@ namespace Esercizio.Repositories;
 public class PersonaRepository
 {
 
-    private AppDB appDB = new AppDB();
+    private AppDB appDb = new AppDB();
 
     public IEnumerable<Persona> GetPeople()
     {
         var result = new List<Persona>();
 
-        appDB.Connection.Open();
-        var command = appDB.Connection.CreateCommand();
+        appDb.Connection.Open();
+        var command = appDb.Connection.CreateCommand();
         command.CommandText = "SELECT * FROM persona";
         var reader = command.ExecuteReader();
 
@@ -21,22 +22,22 @@ public class PersonaRepository
         {
             var persona = new Persona()
             {
-                Id = reader.GetInt16("id"),
-                Nome = reader.GetString("nome"),
-                Cognome = reader.GetString("cognome"),
-                CF = reader.GetString("codice_fiscale")
+                id = reader.GetInt16("id"),
+                nome = reader.GetString("nome"),
+                cognome = reader.GetString("cognome"),
+                cf = reader.GetString("codice_fiscale"),
             };
             result.Add(persona);
         }
-        appDB.Connection.Close();
+        appDb.Connection.Close();
 
         return result;
     }
 
-    public Persona GetPerson(int id)
+    public Persona GetPersona(int? id)
     {
-        appDB.Connection.Open();
-        var command = appDB.Connection.CreateCommand();
+        appDb.Connection.Open();
+        var command = appDb.Connection.CreateCommand();
         command.CommandText = "SELECT * FROM persona WHERE id=@id";
         var parameter = new MySqlParameter()
         {
@@ -51,99 +52,123 @@ public class PersonaRepository
         {
             var persona = new Persona()
             {
-                Id = reader.GetInt16("id"),
-                Nome = reader.GetString("nome"),
-                Cognome = reader.GetString("cognome"),
-                CF = reader.GetString("codice_fiscale")
+                id = reader.GetInt16("id"),
+                nome = reader.GetString("nome"),
+                cognome = reader.GetString("cognome"),
+                cf = reader.GetString("codice_fiscale"),
             };
-            appDB.Connection.Close();
+            appDb.Connection.Close();
             return persona;
         }
 
-        appDB.Connection.Close();
+        appDb.Connection.Close();
         return null;
+    }
+
+    public bool GetPersonaBool(int? id)
+    {
+        appDb.Connection.Open();
+        var command = appDb.Connection.CreateCommand();
+        command.CommandText = "SELECT * FROM persona WHERE id=@id";
+        var parameter = new MySqlParameter()
+        {
+            ParameterName = "id",
+            DbType = System.Data.DbType.Int16,
+            Value = id
+        };
+        command.Parameters.Add(parameter);
+        var reader = command.ExecuteReader();
+
+        while (reader.Read())
+        {
+            var persona = new Persona()
+            {
+                id = reader.GetInt16("id"),
+                nome = reader.GetString("nome"),
+                cognome = reader.GetString("cognome"),
+                cf = reader.GetString("codice_fiscale"),
+            };
+            appDb.Connection.Close();
+            return true;
+        }
+
+        appDb.Connection.Close();
+        return false;
     }
 
     public bool Create(Persona persona)
     {
-        appDB.Connection.Open();
-        var command = appDB.Connection.CreateCommand();
-        command.CommandText = "INSERT INTO persona (id,nome,cognome,codice_fiscale) values (@id,@nome,@cognome,@codice_fiscale)";
-        var parameterId = new MySqlParameter()
-        {
-            ParameterName = "id",
-            DbType = System.Data.DbType.Int16,
-            Value = persona.Id
-        };
-        command.Parameters.Add(parameterId);
-        var parameterNome = new MySqlParameter()
+        appDb.Connection.Open();
+        var command = appDb.Connection.CreateCommand();
+        command.CommandText = "INSERT INTO persona (nome, cognome, codice_fiscale) values (@nome, @cognome, @codice_fiscale)";
+        var parameterName = new MySqlParameter()
         {
             ParameterName = "nome",
             DbType = System.Data.DbType.String,
-            Value = persona.Nome
+            Value = persona.nome
         };
-        command.Parameters.Add(parameterNome);
+        command.Parameters.Add(parameterName);
         var parameterCognome = new MySqlParameter()
         {
             ParameterName = "cognome",
             DbType = System.Data.DbType.String,
-            Value = persona.Cognome
+            Value = persona.cognome
         };
         command.Parameters.Add(parameterCognome);
-        var parameterCF = new MySqlParameter()
+        var parametercodice_fiscale = new MySqlParameter()
         {
             ParameterName = "codice_fiscale",
             DbType = System.Data.DbType.String,
-            Value = persona.Cognome
+            Value = persona.cf
         };
-        command.Parameters.Add(parameterCF);
+        command.Parameters.Add(parametercodice_fiscale);
         var result = Convert.ToBoolean(command.ExecuteNonQuery());
-        appDB.Connection.Close();
+        appDb.Connection.Close();
         return result;
     }
 
     public bool Update(Persona persona)
     {
-        appDB.Connection.Open();
-        var command = appDB.Connection.CreateCommand();
-        command.CommandText = "UPDATE persona SET nome=@nome,cognome=@cognome,codice_fiscale=@codice_fiscale WHERE id=@id";
+        appDb.Connection.Open();
+        var command = appDb.Connection.CreateCommand();
+        command.CommandText = "UPDATE persona SET nome=@nome, cognome=@cognome, codice_fiscale=@codice_fiscale WHERE id=@id";
         var parameterId = new MySqlParameter()
         {
             ParameterName = "id",
             DbType = System.Data.DbType.Int16,
-            Value = persona.Id
+            Value = persona.id
         };
         command.Parameters.Add(parameterId);
-        var parameterNome = new MySqlParameter()
+        var parameterName = new MySqlParameter()
         {
             ParameterName = "nome",
             DbType = System.Data.DbType.String,
-            Value = persona.Nome
+            Value = persona.nome
         };
-        command.Parameters.Add(parameterNome);
-        var parameterCognome = new MySqlParameter()
+                var parameterCognome = new MySqlParameter()
         {
             ParameterName = "cognome",
             DbType = System.Data.DbType.String,
-            Value = persona.Cognome
+            Value = persona.cognome
         };
         command.Parameters.Add(parameterCognome);
-        var parameterCF = new MySqlParameter()
+        var parametercodice_fiscale = new MySqlParameter()
         {
             ParameterName = "codice_fiscale",
             DbType = System.Data.DbType.String,
-            Value = persona.CF
+            Value = persona.cf
         };
-        command.Parameters.Add(parameterCF);
+        command.Parameters.Add(parametercodice_fiscale);
+        command.Parameters.Add(parameterName);
         var result = Convert.ToBoolean(command.ExecuteNonQuery());
-        appDB.Connection.Close();
+        appDb.Connection.Close();
         return result;
     }
 
     public bool Delete(int id)
     {
-        appDB.Connection.Open();
-        var command = appDB.Connection.CreateCommand();
+        appDb.Connection.Open();
+        var command = appDb.Connection.CreateCommand();
         command.CommandText = "DELETE FROM persona WHERE id=@id";
         var parameterId = new MySqlParameter()
         {
@@ -153,7 +178,7 @@ public class PersonaRepository
         };
         command.Parameters.Add(parameterId);
         var result = Convert.ToBoolean(command.ExecuteNonQuery());
-        appDB.Connection.Close();
+        appDb.Connection.Close();
         return result;
     }
 
