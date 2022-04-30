@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Esercizio.Services;
+using Esercizio.Models;
 
 namespace Esercizio.Controllers;
 
@@ -6,67 +8,54 @@ namespace Esercizio.Controllers;
 [Route("[controller]")]
 public class OperatoreController : ControllerBase
 {
-    private static Dictionary<int, Operatore> dict = new Dictionary<int, Operatore>();
+    private OperatoreService operatoreService = new OperatoreService();
 
     [HttpGet]
     public IEnumerable<Operatore> GetOperatori()
     {
-        return dict.Values.ToArray();
+        return operatoreService.GetOperatori();
     }
 
         [HttpGet("{id}")]
     public ActionResult<Operatore> GetOperatore(int id)
     {
-        if (dict.ContainsKey(id))
-        {
-            return dict[id];
-        }
-        else
-        {
-            return NotFound();
-        }
+        return operatoreService.GetOperatore(id);
     }
 
         [HttpPost]
     public IActionResult Create(Operatore operatore)
     {
-        if (dict.ContainsKey(operatore.Id))
-        {
-            return BadRequest();
-        }
-        else
-        {
-            dict.Add(operatore.Id, operatore);
+        var created = operatoreService.Create(operatore);
+        if (created){
             return Ok();
+        }
+        else{
+            return BadRequest();
         }
     }
 
-    [HttpPut("{id}")]
-    public IActionResult Update(int id, [FromBody] Operatore operatore)
+    [HttpPut]
+    public IActionResult Update(Operatore operatore)
     {
-        if (!dict.ContainsKey(id))
-        {
-            return BadRequest();
-        }
-        else
-        {
-            dict[id] = operatore;
+        var updated = operatoreService.Update(operatore);
+        if (updated){
             return Ok();
+        }
+        else{
+            return BadRequest();
         }
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
-        if (!dict.ContainsKey(id))
-        {
-            return BadRequest();
-        }
-        else
-        {
-            dict.Remove(id);
+        var deleted = operatoreService.Delete(id);
+        if (deleted){
             return Ok();
         }
-    }
+        else{
+            return BadRequest();
+        }
     
+    }
 }

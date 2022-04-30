@@ -1,4 +1,5 @@
 using Esercizio.Context;
+using Esercizio.Models;
 using MySql.Data.MySqlClient;
 
 namespace Esercizio.Repositories;
@@ -36,11 +37,11 @@ public class OperatoreRepository
         return result;
     }
 
-    public Operatore GetOperatore(int id)
+    public Operatore GetOperatore(int? id)
     {
         appDB.Connection.Open();
         var command = appDB.Connection.CreateCommand();
-        command.CommandText = "SELECT operatore.*, sede.id as sede_id, sede.citta, sede.indirizzo FROM operatore LEFT JOIN sede ON operatore.sede_id = sede.id WHERE id=@id";
+        command.CommandText = "SELECT operatore.*, sede.id as sede_id, sede.citta, sede.indirizzo FROM operatore LEFT JOIN sede ON operatore.sede_id = sede.id WHERE operatore.id=@id";
         var parameter = new MySqlParameter()
         {
             ParameterName = "id",
@@ -74,7 +75,7 @@ public class OperatoreRepository
     {
         appDB.Connection.Open();
         var command = appDB.Connection.CreateCommand();
-        command.CommandText = "INSERT INTO operatore (id,ruolo,nome,cognome,username,password,sede_id) values (@id,@ruolo,@nome,@cognome,@username,@password,@sede_id)";
+        command.CommandText = "INSERT INTO operatore (id,ruolo,nome,cognome,username,password,sede_id) VALUES (@id,@ruolo,@nome,@cognome,@username,@password,@sede_id)";
         var parameterId = new MySqlParameter()
         {
             ParameterName = "id",
@@ -100,28 +101,28 @@ public class OperatoreRepository
         {
             ParameterName = "cognome",
             DbType = System.Data.DbType.String,
-            Value = operatore.Nome
+            Value = operatore.Cognome
         };
         command.Parameters.Add(parameterCognome);
         var parameterUsername = new MySqlParameter()
         {
             ParameterName = "username",
             DbType = System.Data.DbType.String,
-            Value = operatore.Nome
+            Value = operatore.Username
         };
         command.Parameters.Add(parameterUsername);
         var parameterPassword = new MySqlParameter()
         {
             ParameterName = "password",
             DbType = System.Data.DbType.String,
-            Value = operatore.Nome
+            Value = operatore.Password
         };
         command.Parameters.Add(parameterPassword);
         var parameterSedeId = new MySqlParameter()
         {
             ParameterName = "sede_id",
             DbType = System.Data.DbType.Int16,
-            Value = operatore.Nome
+            Value = operatore.SedeId
         };
         command.Parameters.Add(parameterSedeId);
         var result = Convert.ToBoolean(command.ExecuteNonQuery());
@@ -133,7 +134,7 @@ public class OperatoreRepository
     {
         appDB.Connection.Open();
         var command = appDB.Connection.CreateCommand();
-        command.CommandText = "UPDATE operatore SET ruolo=@ruolo,nome=@nome,cognome=@cognome,username=@username,password=@password,sede_id=@sede_id WHERE id=@id";
+        command.CommandText = "UPDATE operatore SET ruolo=@ruolo,nome=@nome,cognome=@cognome,username=@username,password=@password,sede_id=@sede_id WHERE operatore.id=@id";
         var parameterId = new MySqlParameter()
         {
             ParameterName = "id",
@@ -166,21 +167,21 @@ public class OperatoreRepository
         {
             ParameterName = "username",
             DbType = System.Data.DbType.String,
-            Value = operatore.Nome
+            Value = operatore.Username
         };
         command.Parameters.Add(parameterUsername);
         var parameterPassword = new MySqlParameter()
         {
             ParameterName = "password",
             DbType = System.Data.DbType.String,
-            Value = operatore.Nome
+            Value = operatore.Password
         };
         command.Parameters.Add(parameterPassword);
         var parameterSedeId = new MySqlParameter()
         {
             ParameterName = "sede_id",
             DbType = System.Data.DbType.Int16,
-            Value = operatore.Nome
+            Value = operatore.SedeId
         };
         command.Parameters.Add(parameterSedeId);
         var result = Convert.ToBoolean(command.ExecuteNonQuery());
