@@ -5,7 +5,7 @@ namespace Esercizio.Context;
 public class AppDB 
 {
     public MySqlConnection Connection {get;}
-    private const string defaultConnectionString = "server=localhost;database=piattaforma_vaccini_v2;uid=root;pwd=poldino11;";
+    private const string defaultConnectionString = "server=localhost;database=piattaforma_vaccini_v2;uid=root;pwd=;";
 
     public AppDB()
     {
